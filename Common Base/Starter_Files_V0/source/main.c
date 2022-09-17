@@ -85,17 +85,38 @@ static void prvSetupHardware( void );
 /*-----------------------------------------------------------*/
 
 
-TaskHandle_t xTaskLedCtrl_Handle = NULL;
-
-TaskHandle_t xTaskCheckButton_Handle = NULL;
-
-pinState_t xButton_State = PIN_IS_LOW;
-
-#define NULL_PTR  ( (void*) 0U )
+/*-----------------------------------------------------------*/
+/*                   User-Defined-Macros                     */
+/*-----------------------------------------------------------*/
+#define NULL_PTR  		( (void*) 0U )			/**> Defines NULL Pointer */
 
 
-/* Task 1 */
-/* Task to be created. */
+
+/*-----------------------------------------------------------*/
+/*                   User-Defined-Global-Variables           */
+/*-----------------------------------------------------------*/
+
+TaskHandle_t xTaskLedCtrl_Handle = NULL;			/**> Defines Handler For Task 1 */
+
+TaskHandle_t xTaskCheckButton_Handle = NULL; 	/**> Defines Handler For Task 2*/
+
+pinState_t xButton_State = PIN_IS_LOW;				/**> Defines Global Variable holding Button State */
+
+
+
+/*-----------------------------------------------------------*/
+/*                   User-Defined-Tasks                      */
+/*-----------------------------------------------------------*/
+
+
+/*-----------------------------------------------------------
+** Task_Name: Task_LedCtrl
+** Task_Description: Task that controls LED flashing periodically
+** Task_Periodicity:
+** Task_Communication:
+** Task_Synchronization:
+------------------------------------------------------------*/
+
 void Task_LedCtrl( void * pvParameters )
 {
 
@@ -113,8 +134,13 @@ void Task_LedCtrl( void * pvParameters )
     }
 }
 
-/* Task 2 */
-/* Task to be created. */
+/*-----------------------------------------------------------
+** Task_Name: Task_CheckButton
+** Task_Description: Task that gets input of a button periodically
+** Task_Periodicity:
+** Task_Communication:
+** Task_Synchronization:
+------------------------------------------------------------*/
 void Task_CheckButton( void * pvParameters )
 {
 	 for( ;; )
@@ -133,27 +159,40 @@ void Task_CheckButton( void * pvParameters )
 }
 
 
+/*-----------------------------------------------------------*/
+/*                   User-Defined-Functions                  */
+/*-----------------------------------------------------------*/
+
+
+/*-----------------------------------------------------------
+** Function_Name: Task_CreateTasks
+** Function_Description: Function that creates user tasks
+** Function_Inputs:		<void>
+** Function_Outputs:	<void>
+------------------------------------------------------------*/
 void Task_CreateTasks(void){
 	
 	xTaskCreate(    
-							Task_LedCtrl, /* Function that Implements the Task */
+							Task_LedCtrl, 	/* Function that Implements the Task */
 							"Task_LedCtrl", /* Task Descriptive Name */
-							100, /* Stack Word Size */
-							NULL_PTR, /* Address To passed Parameter */
-							1, /* Priority */
+							100, 						/* Stack Word Size */
+							NULL_PTR, 			/* Address To passed Parameter */
+							1, 							/* Priority */
 							&xTaskLedCtrl_Handle /* Used to pass out the the created task's handle . */
 						);
 	
 	xTaskCreate(    
-							Task_CheckButton, /* Function that Implements the Task */
+							Task_CheckButton, 	/* Function that Implements the Task */
 							"Task_CheckButton", /* Task Descriptive Name */
-							100, /* Stack Word Size */
-							NULL_PTR, /* Address To passed Parameter */
-							2, /* Priority */
+							100, 								/* Stack Word Size */
+							NULL_PTR, 					/* Address To passed Parameter */
+							2, 									/* Priority */
 							&xTaskCheckButton_Handle /* Used to pass out the the created task's handle . */
 						);
 	
 }
+
+
 
 /*
  * Application entry point:
