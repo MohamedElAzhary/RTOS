@@ -1267,7 +1267,8 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
     taskEXIT_CRITICAL();
 
     if( xSchedulerRunning != pdFALSE )
-    {
+    { //AZHARY
+			#if configUSE_EDF_SCHEDULER == 0
         /* If the created task is of a higher priority than the current task
          * then it should run now. */
         if( pxCurrentTCB->uxPriority < pxNewTCB->uxPriority )
@@ -1278,6 +1279,19 @@ static void prvAddNewTaskToReadyList( TCB_t * pxNewTCB )
         {
             mtCOVERAGE_TEST_MARKER();
         }
+			#else
+				
+				if( pxNewTCB->xStateListItem.xItemValue <= (pxCurrentTCB->xStateListItem.xItemValue) )
+				{
+						taskYIELD_IF_USING_PREEMPTION();
+				}
+				else
+				{
+						mtCOVERAGE_TEST_MARKER();
+				}																				
+				
+			#endif
+				
     }
     else
     {
@@ -2687,7 +2701,7 @@ char * pcTaskGetName( TaskHandle_t xTaskToQuery ) /*lint !e971 Unqualified char 
                                       const UBaseType_t uxArraySize,
                                       configRUN_TIME_COUNTER_TYPE * const pulTotalRunTime )
     {
-        UBaseType_t uxTask = 0, uxQueue = configMAX_PRIORITIES;
+        UBaseType_t uxTask = 0; 
 
         vTaskSuspendAll();
         {
@@ -3020,12 +3034,28 @@ BaseType_t xTaskIncrementTick( void )
 				
 				#if configUSE_EDF_SCHEDULER == 0
 
-        /* Tasks of equal priority to the currently running task will share
-         * processing time (time slice) if preemption is on, and the application
-         * writer has not explicitly turned time slicing off. */
-        #if ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_TIME_SLICING == 1 ) )
+					/* Tasks of equal priority to the currently running task will share
+					 * processing time (time slice) if preemption is on, and the application
+					 * writer has not explicitly turned time slicing off. */
+					#if ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_TIME_SLICING == 1 ) )
+							{
+									if( listCURRENT_LIST_LENGTH( &( pxReadyTasksLists[ pxCurrentTCB->uxPriority ] ) ) > ( UBaseType_t ) 1 )
+									{
+											xSwitchRequired = pdTRUE;
+									}
+									else
+									{
+											mtCOVERAGE_TEST_MARKER();
+									}
+							}
+
+					#endif /* ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_TIME_SLICING == 1 ) ) */
+				
+				#else
+				
+						#if ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_TIME_SLICING == 1 ) )
             {
-                if( listCURRENT_LIST_LENGTH( &( pxReadyTasksLists[ pxCurrentTCB->uxPriority ] ) ) > ( UBaseType_t ) 1 )
+                if( listCURRENT_LIST_LENGTH( &( xReadyTasksListEDF ) ) > ( UBaseType_t ) 1 )
                 {
                     xSwitchRequired = pdTRUE;
                 }
@@ -3034,6 +3064,7 @@ BaseType_t xTaskIncrementTick( void )
                     mtCOVERAGE_TEST_MARKER();
                 }
             }
+
         #endif /* ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_TIME_SLICING == 1 ) ) */
 				
 				#endif /* End of #if configUSE_EDF_SCHEDULER == 0 */
@@ -3675,6 +3706,8 @@ static portTASK_FUNCTION( prvIdleTask, pvParameters )
                  * the list, and an occasional incorrect value will not matter.  If
                  * the ready list at the idle priority contains more than one task
                  * then a task other than the idle task is ready to execute. */
+								
+							#if configUSE_EDF_SCHEDULER == 0
                 if( listCURRENT_LIST_LENGTH( &( pxReadyTasksLists[ tskIDLE_PRIORITY ] ) ) > ( UBaseType_t ) 1 )
                 {
                     taskYIELD();
@@ -3683,6 +3716,18 @@ static portTASK_FUNCTION( prvIdleTask, pvParameters )
                 {
                     mtCOVERAGE_TEST_MARKER();
                 }
+							#else	
+								
+								if( listCURRENT_LIST_LENGTH( &( xReadyTasksListEDF ) ) > ( UBaseType_t ) 1 )
+                {
+                    taskYIELD();
+                }
+                else
+                {
+                    mtCOVERAGE_TEST_MARKER();
+                }
+							#endif
+								
             }
         #endif /* ( ( configUSE_PREEMPTION == 1 ) && ( configIDLE_SHOULD_YIELD == 1 ) ) */
 
@@ -3865,18 +3910,19 @@ static portTASK_FUNCTION( prvIdleTask, pvParameters )
 
 static void prvInitialiseTaskLists( void )
 {
-    UBaseType_t uxPriority;
-
-    for( uxPriority = ( UBaseType_t ) 0U; uxPriority < ( UBaseType_t ) configMAX_PRIORITIES; uxPriority++ )
-    {
-        vListInitialise( &( pxReadyTasksLists[ uxPriority ] ) );
-    }
-		
+    
+	
 		/* E.C. */
 		#if ( configUSE_EDF_SCHEDULER == 1 )
-		{
-			vListInitialise( &xReadyTasksListEDF );
-		}
+			{
+				vListInitialise( &xReadyTasksListEDF );
+			}
+		#else
+			UBaseType_t uxPriority;
+			for( uxPriority = ( UBaseType_t ) 0U; uxPriority < ( UBaseType_t ) configMAX_PRIORITIES; uxPriority++ )
+			{
+					vListInitialise( &( pxReadyTasksLists[ uxPriority ] ) );
+			}
 		#endif
 
     vListInitialise( &xDelayedTaskList1 );

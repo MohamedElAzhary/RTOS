@@ -52,6 +52,7 @@
 #define configUSE_STATS_FORMATTING_FUNCTIONS  (1)
 #define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()
 #define portGET_RUN_TIME_COUNTER_VALUE()	(T1TC)
+#define configUSE_TIME_SLICING 0
 
 
 #define configUSE_PREEMPTION		1

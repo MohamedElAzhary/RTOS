@@ -331,7 +331,7 @@
           <Type>0</Type>
           <LineNumber>137</LineNumber>
           <EnabledFlag>0</EnabledFlag>
-          <Address>7874</Address>
+          <Address>7914</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -345,7 +345,7 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>2168</LineNumber>
+          <LineNumber>2182</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -361,7 +361,7 @@
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>3640</LineNumber>
+          <LineNumber>3681</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -377,7 +377,7 @@
         <Bp>
           <Number>3</Number>
           <Type>0</Type>
-          <LineNumber>3643</LineNumber>
+          <LineNumber>3684</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -387,6 +387,38 @@
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>0</BreakIfRCount>
           <Filename>..\..\Source\tasks.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>4</Number>
+          <Type>0</Type>
+          <LineNumber>153</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\..\Starter_Files_V0\source\main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>5</Number>
+          <Type>0</Type>
+          <LineNumber>181</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>..\..\Starter_Files_V0\source\main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
@@ -441,6 +473,81 @@
           <count>9</count>
           <WinNumber>1</WinNumber>
           <ItemText>runTimeStatusBuff</ItemText>
+        </Ww>
+        <Ww>
+          <count>10</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>xReadyTasksListEDF</ItemText>
+        </Ww>
+        <Ww>
+          <count>11</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pxList</ItemText>
+        </Ww>
+        <Ww>
+          <count>12</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>uxTask</ItemText>
+        </Ww>
+        <Ww>
+          <count>13</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>uxTask</ItemText>
+        </Ww>
+        <Ww>
+          <count>14</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pxTCB-&gt;xStateListItem.xItemValue</ItemText>
+        </Ww>
+        <Ww>
+          <count>15</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>pxCurrentTCB-&gt;xStateListItem.xItemValue</ItemText>
+        </Ww>
+        <Ww>
+          <count>16</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>xItemValue</ItemText>
+        </Ww>
+        <Ww>
+          <count>17</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>xConstTickCount</ItemText>
+        </Ww>
+        <Ww>
+          <count>18</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>runTimeStatusBuff_A</ItemText>
+        </Ww>
+        <Ww>
+          <count>19</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>runTimeStatusBuff_B</ItemText>
+        </Ww>
+        <Ww>
+          <count>20</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>(TaskA_EndTime-TaskA_StartTime),0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>21</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>(TaskB_EndTime-TaskB_StartTime),0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>22</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>runTimeStatusBuff</ItemText>
+        </Ww>
+        <Ww>
+          <count>23</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>TaskA_Nominal_ExecTime,0x0A</ItemText>
+        </Ww>
+        <Ww>
+          <count>24</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>TaskB_Nominal_ExecTime,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
@@ -511,17 +618,17 @@
         <Wi>
           <IntNumber>0</IntNumber>
           <FirstString>((IO0PIN &amp; 0x00040000) &gt;&gt; 18 &amp; 0x40000) &gt;&gt; 18</FirstString>
-          <SecondString>0000000000000000000000000000E0FFFFFFEF410100000000000000000000000000000028494F3050494E2026203078303030343030303029203E3E20313800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000001000000E9B524FDE182D43F13000000000000000000000000000000000000004E040000</SecondString>
+          <SecondString>0000000000000000000000000000E0FFFFFFEF410100000000000000000000000000000028494F3050494E2026203078303030343030303029203E3E203138000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000010000005036AE083BB1D33F1D000000000000000000000000000000000000004E040000</SecondString>
         </Wi>
         <Wi>
           <IntNumber>1</IntNumber>
           <FirstString>((IO0PIN &amp; 0x00080000) &gt;&gt; 19 &amp; 0x80000) &gt;&gt; 19</FirstString>
-          <SecondString>FF00000000000000000000000000E0FFFFFFEF410100000000000000000000000000000028494F3050494E2026203078303030383030303029203E3E20313900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000002000000BEFBEE9ABA0CD23F13000000000000000000000000000000000000004E040000</SecondString>
+          <SecondString>FF00000000000000000000000000E0FFFFFFEF410100000000000000000000000000000028494F3050494E2026203078303030383030303029203E3E20313900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000002000000B35E6AC3133BD13F1D000000000000000000000000000000000000004E040000</SecondString>
         </Wi>
         <Wi>
           <IntNumber>2</IntNumber>
           <FirstString>((IO0PIN &amp; 0x00100000) &gt;&gt; 20 &amp; 0x100000) &gt;&gt; 20</FirstString>
-          <SecondString>0080000000000000000000000000E0FFFFFFEF410100000000000000000000000000000028494F3050494E2026203078303031303030303029203E3E20323000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000003000000584EEC676370D93F13000000000000000000000000000000000000004E040000</SecondString>
+          <SecondString>0080000000000000000000000000E0FFFFFFEF410100000000000000000000000000000028494F3050494E2026203078303031303030303029203E3E20323000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000003000000584EEC676370D93F1D000000000000000000000000000000000000004E040000</SecondString>
         </Wi>
       </LogicAnalyzers>
     </TargetOption>

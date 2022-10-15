@@ -104,10 +104,11 @@ TaskHandle_t xTask_B_Handle = NULL;			/**> Defines Handler For Task 2 */
 
 TickType_t TaskA_StartTime=0, TaskB_StartTime=0, TaskA_EndTime=0, TaskB_EndTime=0;
 TickType_t TaskA_TotalTime=0, TaskB_TotalTime=0, System_Time=0;
+TickType_t TaskA_Nominal_ExecTime=0, TaskB_Nominal_ExecTime=0;
+TickType_t TaskA_S1=0,TaskA_E1=0,TaskB_S1=0,TaskB_E1=0;
 unsigned int CPU_Load = 0;
 
-char runTimeStatusBuff_A[50];
-char runTimeStatusBuff_B[50];
+char runTimeStatusBuff[200];
 
 /*-----------------------------------------------------------*/
 /*                   User-Defined-Macros                     */
@@ -150,12 +151,8 @@ void Task_A( void * pvParameters )
 						
 			for(i=0; i<= 30000;i++);		
 			
-			vTaskGetRunTimeStats(runTimeStatusBuff_A);
-			
-			xSerialPutChar('\n');
-			
-			vSerialPutString( (const signed char *) ((char*)&runTimeStatusBuff_A[0]), 40);
-												
+			vTaskGetRunTimeStats(runTimeStatusBuff);
+																		
 			vTaskDelayUntil( &xLastWakeTime, TASK_A_DELAY_MS);
 			
     }
@@ -182,12 +179,12 @@ void Task_B( void * pvParameters )
 			
 			for(i=0; i<= 30000;i++);		
 						
-			vTaskGetRunTimeStats(runTimeStatusBuff_B);
+			vTaskGetRunTimeStats(runTimeStatusBuff);
 			
 			xSerialPutChar('\n');
 			
-			vSerialPutString( (const signed char *) ((char*)&runTimeStatusBuff_B[0]), 40);
-			
+			vSerialPutString( (const signed char *) ((char*)&runTimeStatusBuff[0]), 65);
+						
 			vTaskDelayUntil( &xLastWakeTime, TASK_B_DELAY_MS);
 			
     }

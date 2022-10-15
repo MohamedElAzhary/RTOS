@@ -78,8 +78,11 @@
 
 
 extern TickType_t TaskA_StartTime, TaskB_StartTime, TaskA_EndTime, TaskB_EndTime;
+extern TickType_t TaskA_S1,TaskA_E1,TaskB_S1,TaskB_E1;
 extern TickType_t TaskA_TotalTime, TaskB_TotalTime, System_Time;
 extern unsigned int CPU_Load;
+
+extern TickType_t TaskA_Nominal_ExecTime, TaskB_Nominal_ExecTime;
 
 void configTimer1(void);
 
@@ -89,10 +92,12 @@ void configTimer1(void);
 		case 1:\
 			GPIO_write(PORT_0, PIN2, PIN_IS_HIGH);\
 			TaskA_StartTime = newtempTime;\
+			TaskA_S1 = xTaskGetTickCount();\
 			break;\
 		case 2:\
 			GPIO_write(PORT_0, PIN3, PIN_IS_HIGH);\
 			TaskB_StartTime = newtempTime;\
+			TaskB_S1 = xTaskGetTickCount();\
 			break;\
 		default:\
 			break;\
@@ -105,11 +110,15 @@ void configTimer1(void);
 		case 1:\
 			GPIO_write(PORT_0, PIN2, PIN_IS_LOW);\
 			TaskA_EndTime = newtempTime;\
+			TaskA_E1 = xTaskGetTickCount();\
+			TaskA_Nominal_ExecTime = TaskA_E1-TaskA_S1;\
 			TaskA_TotalTime += (TaskA_EndTime-TaskA_StartTime);\
 			break;\
 		case 2:\
 			GPIO_write(PORT_0, PIN3, PIN_IS_LOW);\
 			TaskB_EndTime = newtempTime;\
+			TaskB_E1 = xTaskGetTickCount();\
+			TaskB_Nominal_ExecTime = TaskB_E1-TaskB_S1;\
 			TaskB_TotalTime += (TaskB_EndTime-TaskB_StartTime);\
 			break;\
 		default:\

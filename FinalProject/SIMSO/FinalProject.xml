@@ -6,7 +6,7 @@
 		<processor cl_overhead="0" cs_overhead="0" id="1" name="CPU 1" speed="1.0"/>
 	</processors>
 	<tasks>
-		<task ACET="0" WCET="4.01485" abort_on_miss="no" activationDate="0" base_cpi="1.0" deadline="10" et_stddev="0" id="1" instructions="0" list_activation_dates="" mix="0.5" name="TASK T1" period="10" preemption_cost="0" task_type="Periodic"/>
-		<task ACET="0" WCET="4.008" abort_on_miss="no" activationDate="0" base_cpi="1.0" deadline="20.0" et_stddev="0" id="2" instructions="0" list_activation_dates="" mix="0.5" name="TASK T2" period="20.0" preemption_cost="0" task_type="Periodic"/>
+		<task ACET="0.0" WCET="4.3118" abort_on_miss="no" activationDate="0.0" base_cpi="1.0" deadline="10.0" et_stddev="0.0" id="1" instructions="0" list_activation_dates="" mix="0.5" name="TASK T1" period="10.0" preemption_cost="0" task_type="Periodic"/>
+		<task ACET="0.0" WCET="4.320833" abort_on_miss="no" activationDate="0.0" base_cpi="1.0" deadline="20.0" et_stddev="0.0" id="2" instructions="0" list_activation_dates="" mix="0.5" name="TASK T2" period="20.0" preemption_cost="0" task_type="Periodic"/>
 	</tasks>
 </simulation>
