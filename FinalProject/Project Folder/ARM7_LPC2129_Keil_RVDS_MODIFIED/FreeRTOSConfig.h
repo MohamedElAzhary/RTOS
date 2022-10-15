@@ -45,7 +45,16 @@
 #define configUSE_EDF_SCHEDULER	(1U)	/* Enable/Disable EDF Scheduling */
 #define EDF_IDLE_PERIOD					(100U)
 
-#define configUSE_PREEMPTION		0
+#define configUSE_APPLICATION_TASK_TAG (1)
+#define INCLUDE_xTaskGetCurrentTaskHandle	(1)
+
+#define configGENERATE_RUN_TIME_STATS	(1)
+#define configUSE_STATS_FORMATTING_FUNCTIONS  (1)
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()
+#define portGET_RUN_TIME_COUNTER_VALUE()	(T1TC)
+
+
+#define configUSE_PREEMPTION		1
 #define configUSE_IDLE_HOOK			0
 #define configUSE_TICK_HOOK			0
 #define configCPU_CLOCK_HZ			( ( unsigned long ) 60000000 )	/* =12.0MHz xtal multiplied by 5 using the PLL. */
@@ -54,7 +63,7 @@
 #define configMINIMAL_STACK_SIZE	( ( unsigned short ) 90 )
 #define configTOTAL_HEAP_SIZE		( ( size_t ) 13 * 1024 )
 #define configMAX_TASK_NAME_LEN		( 8 )
-#define configUSE_TRACE_FACILITY	0
+#define configUSE_TRACE_FACILITY	1
 #define configUSE_16_BIT_TICKS		0
 #define configIDLE_SHOULD_YIELD		1
 

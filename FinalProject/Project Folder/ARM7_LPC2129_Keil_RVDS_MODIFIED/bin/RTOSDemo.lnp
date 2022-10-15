@@ -12,8 +12,6 @@
 ".\bin\port.o"
 ".\bin\heap_2.o"
 ".\bin\portasm.o"
-".\bin\edf.o"
-".\bin\edf_cfg.o"
 --strict --scatter ".\bin\RTOSDemo.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

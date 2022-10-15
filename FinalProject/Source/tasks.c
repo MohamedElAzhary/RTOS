@@ -2984,24 +2984,21 @@ BaseType_t xTaskIncrementTick( void )
 										
 										#endif /* End of #if configUSE_EDF_SCHEDULER == 1 */
 										
-										
-										#if configUSE_EDF_SCHEDULER == 1
-												if( pxTCB->xStateListItem.xItemValue < (pxCurrentTCB->xStateListItem.xItemValue) )
-												{
-														xSwitchRequired = pdTRUE;
-												}
-												else
-												{
-														mtCOVERAGE_TEST_MARKER();
-												}
-										
-										#endif /* End of #if configUSE_EDF_SCHEDULER == 1 */
-										
 
                     /* A task being unblocked cannot cause an immediate
                      * context switch if preemption is turned off. */
                     #if ( configUSE_PREEMPTION == 1 )
-                        {
+										
+												#if configUSE_EDF_SCHEDULER == 1
+														if( pxTCB->xStateListItem.xItemValue <= (pxCurrentTCB->xStateListItem.xItemValue) )
+														{
+																xSwitchRequired = pdTRUE;
+														}
+														else
+														{
+																mtCOVERAGE_TEST_MARKER();
+														}																				
+												#else
                             /* Preemption is on, but a context switch should
                              * only be performed if the unblocked task has a
                              * priority that is equal to or higher than the
@@ -3014,11 +3011,14 @@ BaseType_t xTaskIncrementTick( void )
                             {
                                 mtCOVERAGE_TEST_MARKER();
                             }
-                        }
+												#endif /* End of #if configUSE_EDF_SCHEDULER == 1 */
+
                     #endif /* configUSE_PREEMPTION */
                 }
             }
         }
+				
+				#if configUSE_EDF_SCHEDULER == 0
 
         /* Tasks of equal priority to the currently running task will share
          * processing time (time slice) if preemption is on, and the application
@@ -3035,6 +3035,8 @@ BaseType_t xTaskIncrementTick( void )
                 }
             }
         #endif /* ( ( configUSE_PREEMPTION == 1 ) && ( configUSE_TIME_SLICING == 1 ) ) */
+				
+				#endif /* End of #if configUSE_EDF_SCHEDULER == 0 */
 
         #if ( configUSE_TICK_HOOK == 1 )
             {
@@ -3644,9 +3646,8 @@ static portTASK_FUNCTION( prvIdleTask, pvParameters )
 			
 				#if (configUSE_EDF_SCHEDULER == 1)
 			
-				pxCurrentTCB->xStateListItem.xItemValue = EDF_IDLE_PERIOD + xTaskGetTickCount();
+						pxCurrentTCB->xStateListItem.xItemValue = EDF_IDLE_PERIOD + xTaskGetTickCount();
 						
-					//listSET_LIST_ITEM_VALUE( ( ListItem_t* )listGET_END_MARKER(&xReadyTasksListEDF), ( EDF_IDLE_PERIOD + xTaskGetTickCount()) );
 				#endif
         /* See if any tasks have deleted themselves - if so then the idle task
          * is responsible for freeing the deleted task's TCB and stack. */

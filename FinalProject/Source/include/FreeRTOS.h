@@ -49,6 +49,8 @@
  */
 #include <stdint.h> /* READ COMMENT ABOVE. */
 
+
+
 /* *INDENT-OFF* */
 #ifdef __cplusplus
     extern "C" {
@@ -73,6 +75,53 @@
 #if ( configUSE_NEWLIB_REENTRANT == 1 )
     #include <reent.h>
 #endif
+
+
+extern TickType_t TaskA_StartTime, TaskB_StartTime, TaskA_EndTime, TaskB_EndTime;
+extern TickType_t TaskA_TotalTime, TaskB_TotalTime, System_Time;
+extern unsigned int CPU_Load;
+
+void configTimer1(void);
+
+#define function_SwitchedIN()		{\
+	unsigned int newtempTime = T1TC;\
+	switch( (int) pxCurrentTCB->pxTaskTag ){\
+		case 1:\
+			GPIO_write(PORT_0, PIN2, PIN_IS_HIGH);\
+			TaskA_StartTime = newtempTime;\
+			break;\
+		case 2:\
+			GPIO_write(PORT_0, PIN3, PIN_IS_HIGH);\
+			TaskB_StartTime = newtempTime;\
+			break;\
+		default:\
+			break;\
+	}\
+}
+
+#define function_SwitchedOUT()		{\
+	unsigned int newtempTime = T1TC;\
+	switch( (int) pxCurrentTCB->pxTaskTag ){\
+		case 1:\
+			GPIO_write(PORT_0, PIN2, PIN_IS_LOW);\
+			TaskA_EndTime = newtempTime;\
+			TaskA_TotalTime += (TaskA_EndTime-TaskA_StartTime);\
+			break;\
+		case 2:\
+			GPIO_write(PORT_0, PIN3, PIN_IS_LOW);\
+			TaskB_EndTime = newtempTime;\
+			TaskB_TotalTime += (TaskB_EndTime-TaskB_StartTime);\
+			break;\
+		default:\
+			break;\
+	}\
+	System_Time=newtempTime;\
+	CPU_Load = 	(100*((TaskA_TotalTime + TaskB_TotalTime)/(float)System_Time));\
+}
+
+
+
+
 
 /*
  * Check all the required application specific macros have been defined.
@@ -357,7 +406,7 @@
 
 /* Called after a task has been selected to run.  pxCurrentTCB holds a pointer
  * to the task control block of the selected task. */
-    #define traceTASK_SWITCHED_IN()
+    #define traceTASK_SWITCHED_IN()		function_SwitchedIN()
 #endif
 
 #ifndef traceINCREASE_TICK_COUNT
@@ -381,7 +430,7 @@
 
 /* Called before a task has been selected to run.  pxCurrentTCB holds a pointer
  * to the task control block of the task being switched out. */
-    #define traceTASK_SWITCHED_OUT()
+    #define traceTASK_SWITCHED_OUT()		function_SwitchedOUT()
 #endif
 
 #ifndef traceTASK_PRIORITY_INHERIT
@@ -1352,6 +1401,12 @@ typedef struct xSTATIC_STREAM_BUFFER
 
 /* Message buffers are built on stream buffers. */
 typedef StaticStreamBuffer_t StaticMessageBuffer_t;
+
+
+
+
+
+
 
 /* *INDENT-OFF* */
 #ifdef __cplusplus

@@ -492,31 +492,6 @@
             </File>
           </Files>
         </Group>
-        <Group>
-          <GroupName>EDF</GroupName>
-          <Files>
-            <File>
-              <FileName>EDF.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\EDF\EDF.h</FilePath>
-            </File>
-            <File>
-              <FileName>EDF.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\EDF\EDF.c</FilePath>
-            </File>
-            <File>
-              <FileName>EDF_cfg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\EDF\EDF_cfg.c</FilePath>
-            </File>
-            <File>
-              <FileName>EDF_cfg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\EDF\EDF_cfg.h</FilePath>
-            </File>
-          </Files>
-        </Group>
       </Groups>
     </Target>
     <Target>
@@ -1003,31 +978,6 @@
               <FileName>portASM.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\..\Source\portable\RVDS\ARM7_LPC21xx\portASM.s</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>EDF</GroupName>
-          <Files>
-            <File>
-              <FileName>EDF.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\EDF\EDF.h</FilePath>
-            </File>
-            <File>
-              <FileName>EDF.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\EDF\EDF.c</FilePath>
-            </File>
-            <File>
-              <FileName>EDF_cfg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\EDF\EDF_cfg.c</FilePath>
-            </File>
-            <File>
-              <FileName>EDF_cfg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\EDF\EDF_cfg.h</FilePath>
             </File>
           </Files>
         </Group>

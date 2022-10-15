@@ -89,13 +89,7 @@ static void prvSetupHardware( void );
 /*-----------------------------------------------------------*/
 
 
-/*-----------------------------------------------------------*/
-/*                   User-Defined-Macros                     */
-/*-----------------------------------------------------------*/
-#define NULL_PTR  		( (void*) 0U )			/**> Defines NULL Pointer */
 
-#define TASK_A_DELAY_MS					(10U) 	/**> Defines Delay for Button A Task */
-#define TASK_B_DELAY_MS					(20U) 	/**> Defines Delay for Button B Task */
 
 /*-----------------------------------------------------------*/
 /*                   User-Defined-Types			                 */
@@ -107,6 +101,24 @@ static void prvSetupHardware( void );
 
 TaskHandle_t xTask_A_Handle = NULL;			/**> Defines Handler For Task 1 */
 TaskHandle_t xTask_B_Handle = NULL;			/**> Defines Handler For Task 2 */
+
+TickType_t TaskA_StartTime=0, TaskB_StartTime=0, TaskA_EndTime=0, TaskB_EndTime=0;
+TickType_t TaskA_TotalTime=0, TaskB_TotalTime=0, System_Time=0;
+unsigned int CPU_Load = 0;
+
+char runTimeStatusBuff_A[50];
+char runTimeStatusBuff_B[50];
+
+/*-----------------------------------------------------------*/
+/*                   User-Defined-Macros                     */
+/*-----------------------------------------------------------*/
+#define NULL_PTR  		( (void*) 0U )			/**> Defines NULL Pointer */
+
+#define TASK_A_DELAY_MS					(10U) 	/**> Defines Delay for Button A Task */
+#define TASK_B_DELAY_MS					(20U) 	/**> Defines Delay for Button B Task */
+
+
+
 
 /*-----------------------------------------------------------*/
 /*                   User-Defined-Prototypes                 */
@@ -123,23 +135,29 @@ TaskHandle_t xTask_B_Handle = NULL;			/**> Defines Handler For Task 2 */
 ** Task_Periodicity: TASKS_BUTTONA_DELAY_MS <3>
 ** Task_Communication:
 ** Task_Synchronization:
-** Task_Independent_Execution_Time: 6.13 <us>
+** Task_Independent_Execution_Time: 4.01485 <ms>
 ------------------------------------------------------------*/
 void Task_A( void * pvParameters )
 {
 	
 		TickType_t xLastWakeTime = xTaskGetTickCount();
 	
+		vTaskSetApplicationTaskTag( NULL, (TaskHookFunction_t) 1 );
+	
     for( ;; )
     {
 			unsigned int i=0;
-			GPIO_write(PORT_0, PIN2, PIN_IS_HIGH);
+						
+			for(i=0; i<= 30000;i++);		
 			
-			for(i=0; i<= 10000;i++);		
-						
-			GPIO_write(PORT_0, PIN2, PIN_IS_LOW);
-						
+			vTaskGetRunTimeStats(runTimeStatusBuff_A);
+			
+			xSerialPutChar('\n');
+			
+			vSerialPutString( (const signed char *) ((char*)&runTimeStatusBuff_A[0]), 40);
+												
 			vTaskDelayUntil( &xLastWakeTime, TASK_A_DELAY_MS);
+			
     }
 }
 
@@ -150,22 +168,28 @@ void Task_A( void * pvParameters )
 ** Task_Periodicity: TASKS_BUTTONB_DELAY_MS <4>
 ** Task_Communication:
 ** Task_Synchronization:
-** Task_Independent_Execution_Time: 6.13 <us>
+** Task_Independent_Execution_Time: 4.008 <ms>
 ------------------------------------------------------------*/
 void Task_B( void * pvParameters )
 {
 		TickType_t xLastWakeTime = xTaskGetTickCount();
 	
+		vTaskSetApplicationTaskTag( NULL, (TaskHookFunction_t) 2 );
+	
     for( ;; )
     {
 			unsigned int i=0;
-			GPIO_write(PORT_0, PIN3, PIN_IS_HIGH);
 			
-			for(i=0; i<= 10000;i++);		
+			for(i=0; i<= 30000;i++);		
 						
-			GPIO_write(PORT_0, PIN3, PIN_IS_LOW);
-						
+			vTaskGetRunTimeStats(runTimeStatusBuff_B);
+			
+			xSerialPutChar('\n');
+			
+			vSerialPutString( (const signed char *) ((char*)&runTimeStatusBuff_B[0]), 40);
+			
 			vTaskDelayUntil( &xLastWakeTime, TASK_B_DELAY_MS);
+			
     }
 }
 
@@ -185,15 +209,7 @@ void Task_B( void * pvParameters )
 ------------------------------------------------------------*/
 void Task_CreateTasks(void){
 	
-	xTaskPeriodicCreate(    
-							Task_A, 	/* Function that Implements the Task */
-							"Task_A", /* Task Descriptive Name */
-							150, 						/* Stack Word Size */
-							NULL_PTR, 			/* Address To passed Parameter */
-							1, 							/* Priority */
-							&xTask_A_Handle, /* Used to pass out the the created task's handle . */
-							TASK_A_DELAY_MS
-						);
+	#if configUSE_EDF_SCHEDULER == 1
 	
 	xTaskPeriodicCreate(    
 							Task_B, 	/* Function that Implements the Task */
@@ -204,6 +220,39 @@ void Task_CreateTasks(void){
 							&xTask_B_Handle, /* Used to pass out the the created task's handle . */
 							TASK_B_DELAY_MS
 						);
+	
+	xTaskPeriodicCreate(    
+							Task_A, 	/* Function that Implements the Task */
+							"Task_A", /* Task Descriptive Name */
+							150, 						/* Stack Word Size */
+							NULL_PTR, 			/* Address To passed Parameter */
+							1, 							/* Priority */
+							&xTask_A_Handle, /* Used to pass out the the created task's handle . */
+							TASK_A_DELAY_MS
+						);
+						
+	#else
+	
+		xTaskCreate(    
+							Task_B, 	/* Function that Implements the Task */
+							"Task_B", /* Task Descriptive Name */
+							150, 						/* Stack Word Size */
+							NULL_PTR, 			/* Address To passed Parameter */
+							1, 							/* Priority */
+							&xTask_B_Handle /* Used to pass out the the created task's handle . */
+						);
+	
+	xTaskCreate(    
+							Task_A, 	/* Function that Implements the Task */
+							"Task_A", /* Task Descriptive Name */
+							150, 						/* Stack Word Size */
+							NULL_PTR, 			/* Address To passed Parameter */
+							1, 							/* Priority */
+							&xTask_A_Handle /* Used to pass out the the created task's handle . */
+						);
+	
+	#endif
+	
 	
 }
 
@@ -236,6 +285,22 @@ int main( void )
 }
 /*-----------------------------------------------------------*/
 
+/* Function to reset timer 1 */
+void timer1Reset(void)
+{
+	T1TCR |= 0x2;
+	T1TCR &= ~0x2;
+}
+
+/* Function to initialize and start timer 1 */
+void configTimer1(void)
+{
+	T1PR = 1000;
+	T1TCR |= 0x1;
+}
+
+
+
 static void prvSetupHardware( void )
 {
 	/* Perform the hardware setup required.  This is minimal as most of the
@@ -246,6 +311,9 @@ static void prvSetupHardware( void )
 
 	/* Configure GPIO */
 	GPIO_init();
+	
+	/* Config trace timer 1 and read T1TC to get current tick */
+	configTimer1();
 
 	/* Setup the peripheral bus to be the same as the PLL output. */
 	VPBDIV = mainBUS_CLK_FULL;
